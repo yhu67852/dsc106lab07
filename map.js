@@ -15,9 +15,9 @@ const map = new mapboxgl.Map({
 });
 
 const bikeLaneStyle = {
-    'line-color': '#32D400',
-    'line-width': 5,
-    'line-opacity': 0.6
+    'line-color': '#22c55e',
+    'line-width': 2.5,
+    'line-opacity': 0.45
 };
 
 let departuresByMinute = Array.from({ length: 1440 }, () => []);
@@ -210,4 +210,28 @@ map.on('load', async () => {
 
     timeSlider.addEventListener('input', updateTimeDisplay);
     updateTimeDisplay();
+    const tooltip = d3.select('#tooltip');
+
+    function attachTooltipEvents(selection) {
+        selection
+            .on('mouseenter', (event, d) => {
+                tooltip
+                    .classed('visible', true)
+                    .html(`
+                        <div class="station-name">${d.NAME}</div>
+                        <div class="station-stats">
+                            <strong>${d.totalTraffic.toLocaleString()}</strong> trips
+                            (${d.departures.toLocaleString()} out · ${d.arrivals.toLocaleString()} in)
+                        </div>
+                    `);
+            })
+            .on('mousemove', (event) => {
+                tooltip
+                    .style('left', `${event.clientX}px`)
+                    .style('top', `${event.clientY}px`);
+            })
+            .on('mouseleave', () => {
+                tooltip.classed('visible', false);
+            });
+    }
 });
