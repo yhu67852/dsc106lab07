@@ -55,7 +55,6 @@ header em {
     pointer-events: none;
 }
 
-/* Shared color scale variables for circles and legend */
 #map circle,
 .legend > div {
     --color-departures: steelblue;
